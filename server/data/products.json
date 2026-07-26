@@ -1,0 +1,164 @@
+[
+  {
+    "id": "wstum71n6",
+    "createdAt": "2026-06-04T13:43:08.493Z",
+    "title": "Sleek Modern Leather Sofa",
+    "description": "Premium three-seater leather sofa with high-density foam cushions, timber supports, and minimalist ergonomic design.",
+    "price": 499,
+    "deposit": 1500,
+    "category": "furniture",
+    "type": "sofa",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "riq7ihglm",
+    "createdAt": "2026-06-04T13:43:08.498Z",
+    "title": "Smart Double-Door Refrigerator",
+    "description": "Sleek stainless-steel double-door refrigerator featuring smart temperature zones, touch panel controls, and energy-saving rating.",
+    "price": 699,
+    "deposit": 2000,
+    "category": "appliances",
+    "type": "fridge",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1571175432267-efb92b4c6831?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "mxmcjh8vj",
+    "createdAt": "2026-06-04T13:43:08.501Z",
+    "title": "Minimalist Queen Wooden Bed",
+    "description": "Sturdy solid oak queen bed frame, handcrafted with rounded edges and multi-slat base structure. Mattress included.",
+    "price": 399,
+    "deposit": 1200,
+    "category": "furniture",
+    "type": "bed",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "bhoh4j8rn",
+    "createdAt": "2026-06-04T13:43:08.503Z",
+    "title": "Solid Oak Study & Dining Table",
+    "description": "Sturdily constructed oak dining and study table with steel reinforcements. Seats up to 4 people comfortably.",
+    "price": 299,
+    "deposit": 1000,
+    "category": "furniture",
+    "type": "table",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "tjnh726k2",
+    "createdAt": "2026-06-04T13:43:08.504Z",
+    "title": "Ultra HD Smart LED TV 55\"",
+    "description": "Vibrant 4K UHD smart TV with high-refresh rate screen, built-in soundbar interface, and pre-loaded streaming applications.",
+    "price": 599,
+    "deposit": 2500,
+    "category": "appliances",
+    "type": "TV",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "tn1u7aeji",
+    "createdAt": "2026-06-04T13:43:08.506Z",
+    "title": "Fully Automatic Front-Load Washer",
+    "description": "High-capacity front-loading washing machine with silent inverter motor, active steam cleaning cycles, and smart app support.",
+    "price": 799,
+    "deposit": 2200,
+    "category": "appliances",
+    "type": "washing machine",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "hojn5km3q",
+    "createdAt": "2026-06-04T13:43:08.507Z",
+    "title": "Ergonomic Office Chair & Desk Combo",
+    "description": "Comfortable mesh back lumbar support chair paired with a clean white minimalist steel-frame computer desk.",
+    "price": 349,
+    "deposit": 1100,
+    "category": "furniture",
+    "type": "table",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "vzc87e3mn",
+    "createdAt": "2026-06-04T13:43:08.517Z",
+    "title": "Retro Single-Door Refrigerator",
+    "description": "Charming vintage-style single door compact refrigerator, energy efficient and perfect for smaller rooms or offices.",
+    "price": 449,
+    "deposit": 1500,
+    "category": "appliances",
+    "type": "fridge",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  },
+  {
+    "id": "m69x9jd6e",
+    "createdAt": "2026-06-04T13:43:08.520Z",
+    "title": "Compact Smart LED TV 32\"",
+    "description": "Excellent secondary smart TV for bedrooms or kitchens, featuring clear HDR imaging and voice-control remote assistance.",
+    "price": 299,
+    "deposit": 1000,
+    "category": "appliances",
+    "type": "TV",
+    "tenures": [
+      3,
+      6,
+      12
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1593784991095-a205069470b6?auto=format&fit=crop&w=800&q=80",
+    "ownerId": "landlord123",
+    "isAvailable": true
+  }
+]

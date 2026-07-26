@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-brand-600 selection:text-white;
+  }
+
+  * {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-3xl border border-slate-200 shadow-urban;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .badge-emerald {
+    @apply bg-emerald-50 text-emerald-700 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-emerald-200;
+  }
+
+  .badge-amber {
+    @apply bg-amber-50 text-amber-700 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-amber-200;
+  }
+
+  .badge-indigo {
+    @apply bg-indigo-50 text-indigo-700 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-indigo-200;
+  }
+
+  .badge-red {
+    @apply bg-red-50 text-red-700 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-red-200;
+  }
+
+  .badge-slate {
+    @apply bg-slate-100 text-slate-600 font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider;
+  }
+
+  .form-input {
+    @apply w-full text-xs font-medium px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all;
+  }
+
+  .form-label {
+    @apply text-xs font-bold text-slate-700 block mb-1;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-brand-900 to-brand-800 hover:from-brand-950 hover:to-brand-900 text-white font-extrabold text-sm py-3 px-6 rounded-2xl shadow-lg transition-all cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm py-3 px-6 rounded-2xl transition-all cursor-pointer;
+  }
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.urban-gradient-hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #0f766e 100%);
+}
+
+.urban-gradient-accent {
+  background: linear-gradient(135deg, #4f46e5 0%, #0d9488 100%);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.35s ease both;
+}

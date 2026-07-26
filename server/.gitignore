@@ -1,0 +1,7 @@
+# Server secrets and generated files
+.env
+.env.*
+!.env.example
+node_modules/
+coverage/
+*.log

@@ -1,0 +1,17 @@
+# Dependencies and generated assets
+node_modules/
+client/node_modules/
+server/node_modules/
+client/dist/
+
+# Environment files contain deployment secrets and must never be committed.
+.env
+.env.*
+!.env.example
+
+# Logs and local editor files
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
