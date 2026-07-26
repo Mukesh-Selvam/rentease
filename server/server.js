@@ -28,18 +28,13 @@ if (process.env.NODE_ENV === 'production') {
   const requiredEnvVars = [
     'JWT_SECRET',
     'MONGODB_URI',
-    'CLIENT_URL',
-    'RAZORPAY_KEY_ID',
-    'RAZORPAY_KEY_SECRET',
-    'RAZORPAY_WEBHOOK_SECRET'
+    'CLIENT_URL'
   ];
 
   const missing = requiredEnvVars.filter((v) => !process.env[v]);
 
   if (missing.length > 0) {
-    console.error(
-      `[FATAL] Missing required production environment variables: ${missing.join(', ')}`
-    );
+    console.error(`[FATAL] Missing required production environment variables: ${missing.join(', ')}`);
     process.exit(1);
   }
 }
