@@ -25,64 +25,128 @@ dotenv.config();
 
 // Startup validation for production
 if (process.env.NODE_ENV === 'production') {
-  const requiredEnvVars = ['JWT_SECRET', 'MONGODB_URI', 'CLIENT_URL', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET', 'RAZORPAY_WEBHOOK_SECRET'];
+  const requiredEnvVars = [
+    'JWT_SECRET',
+    'MONGODB_URI',
+    'CLIENT_URL',
+    'RAZORPAY_KEY_ID',
+    'RAZORPAY_KEY_SECRET',
+    'RAZORPAY_WEBHOOK_SECRET'
+  ];
+
   const missing = requiredEnvVars.filter((v) => !process.env[v]);
+
   if (missing.length > 0) {
-    console.error(`[FATAL] Missing required production environment variables: ${missing.join(', ')}`);
+    console.error(
+      `[FATAL] Missing required production environment variables: ${missing.join(', ')}`
+    );
     process.exit(1);
   }
 }
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/rentease';
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  process.env.MONGO_URI ||
+  'mongodb://127.0.0.1:27017/rentease';
+
+const CLIENT_URL =
+  process.env.CLIENT_URL ||
+  'http://localhost:5173';
+
 const isProduction = process.env.NODE_ENV === 'production';
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || CLIENT_URL).split(',').map((origin) => origin.trim()).filter(Boolean);
-if (!isProduction) allowedOrigins.push('http://localhost:5173', 'http://127.0.0.1:5173');
 
-// Security Headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://checkout.razorpay.com'],
-      frameSrc: ["'self'", 'https://api.razorpay.com', 'https://checkout.razorpay.com'],
-      connectSrc: ["'self'", 'https://api.razorpay.com'],
-      imgSrc: ["'self'", 'data:', 'https:'],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
-      fontSrc: ["'self'", 'https:', 'data:']
+const allowedOrigins = (
+  process.env.ALLOWED_ORIGINS || CLIENT_URL
+)
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+if (!isProduction) {
+  allowedOrigins.push(
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+  );
+}
+
+// Security
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'https://checkout.razorpay.com'],
+        frameSrc: [
+          "'self'",
+          'https://api.razorpay.com',
+          'https://checkout.razorpay.com'
+        ],
+        connectSrc: [
+          "'self'",
+          'https://api.razorpay.com'
+        ],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
+        fontSrc: ["'self'", 'https:', 'data:']
+      }
+    },
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin'
     }
-  },
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
-}));
+  })
+);
 
-// CORS Middleware with credentials support
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Idempotency-Key', 'X-Razorpay-Signature']
-}));
+// CORS
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: [
+      'GET',
+      'POST',
+      'PUT',
+      'PATCH',
+      'DELETE',
+      'OPTIONS'
+    ],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'X-Idempotency-Key',
+      'X-Razorpay-Signature'
+    ]
+  })
+);
 
 app.use(cookieParser());
 
-// Raw body parser specifically for Razorpay Webhooks before JSON body parser
-app.post('/api/payment/webhook', express.raw({ type: 'application/json' }), handleRazorpayWebhook);
+// Razorpay Webhook
+app.post(
+  '/api/payment/webhook',
+  express.raw({ type: 'application/json' }),
+  handleRazorpayWebhook
+);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-// MongoDB Connection
+// MongoDB
 mongoose
   .connect(MONGODB_URI)
-  .then(() => console.log(`[MongoDB] Connected successfully to ${MONGODB_URI}`))
+  .then(() => {
+    console.log(`[MongoDB] Connected successfully`);
+  })
   .catch((err) => {
-    console.warn(`[MongoDB Warning] Could not connect to MongoDB at ${MONGODB_URI}: ${err.message}`);
+    console.warn(`[MongoDB Warning] ${err.message}`);
   });
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
@@ -98,34 +162,53 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Health check
+// Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
     service: 'RentEase MERN API',
     timestamp: new Date().toISOString(),
-    dbState: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    dbState:
+      mongoose.connection.readyState === 1
+        ? 'connected'
+        : 'disconnected'
   });
 });
 
-// 404 Handler
-app.use((req, res, next) => {
-  res.status(404).json({ message: `API Endpoint Not Found: ${req.method} ${req.originalUrl}` });
+// 404
+app.use((req, res) => {
+  res.status(404).json({
+    message: `API Endpoint Not Found: ${req.method} ${req.originalUrl}`
+  });
 });
 
-// Centralized Error Handler
+// Error Handler
 app.use((err, req, res, next) => {
-  console.error('[Express Error]', err);
-  const statusCode = err.statusCode || err.status || 500;
-  res.status(statusCode).json({
+  console.error(err);
+
+  res.status(err.status || 500).json({
     message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(process.env.NODE_ENV === 'development'
+      ? { stack: err.stack }
+      : {})
   });
 });
 
-if (process.env.NODE_ENV !== 'test') {
+/*
+|--------------------------------------------------------------------------
+| Start server only in Local Development
+|--------------------------------------------------------------------------
+| Vercel provides its own server, so we must NOT call app.listen()
+| in production.
+*/
+if (
+  process.env.NODE_ENV !== 'production' &&
+  process.env.NODE_ENV !== 'test'
+) {
   app.listen(PORT, () => {
-    console.log(`🚀 RentEase Express API server running on http://localhost:${PORT}`);
+    console.log(
+      `🚀 RentEase API running at http://localhost:${PORT}`
+    );
   });
 }
 
