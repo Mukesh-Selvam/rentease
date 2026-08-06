@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 
 import authRoutes from './routes/auth.js';
+import { MongoClient } from 'mongodb';
 import productRoutes from './routes/products.js';
 import cartRoutes from './routes/cart.js';
 import orderRoutes from './routes/orders.js';
@@ -230,6 +231,27 @@ app.get('/api/health', (req, res) => {
     lastMongoEvent,
     lastMongoError
   });
+});
+
+// Temporary DB check route (uses native driver) — returns immediate error message when connection fails
+app.get('/api/dbcheck', async (req, res) => {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) return res.status(500).json({ ok: false, error: 'MONGODB_URI not set' });
+
+  const client = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 5000,
+    family: 4
+  });
+
+  try {
+    await client.connect();
+    await client.db().admin().ping();
+    await client.close();
+    return res.json({ ok: true, message: 'native driver connected' });
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err.message || String(err) });
+  }
 });
 
 // 404
