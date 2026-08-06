@@ -136,11 +136,34 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+mongoose.connection.on('connecting', () => {
+  console.log('[MongoDB] event: connecting');
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('[MongoDB] event: connected');
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('[MongoDB] event: disconnected');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('[MongoDB] event: error', err);
+});
+
+const mongoConnectOptions = {
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  family: 4
+};
+
 // MongoDB — connect with retries/backoff to handle transient network issues
 async function connectWithRetries(uri, attempts = 5, delayMs = 2000) {
   for (let i = 1; i <= attempts; i++) {
     try {
-      await mongoose.connect(uri);
+      await mongoose.connect(uri, mongoConnectOptions);
       console.log('[MongoDB] Connected successfully');
       return;
     } catch (err) {
