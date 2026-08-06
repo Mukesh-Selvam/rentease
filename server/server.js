@@ -7,7 +7,6 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 
 import authRoutes from './routes/auth.js';
-import { MongoClient } from 'mongodb';
 import productRoutes from './routes/products.js';
 import cartRoutes from './routes/cart.js';
 import orderRoutes from './routes/orders.js';
@@ -56,9 +55,6 @@ const CLIENT_URL =
 const isProduction = process.env.NODE_ENV === 'production';
 
 const sanitizedMongoUri = MONGODB_URI.replace(/(mongodb(?:\+srv)?:\/\/[^:]+:)([^@]+)(@.*)/, '$1*****$3');
-console.log('[MongoDB] NODE_ENV:', process.env.NODE_ENV || 'undefined');
-console.log('[MongoDB] MONGODB_URI set:', Boolean(process.env.MONGODB_URI));
-console.log('[MongoDB] Using URI:', sanitizedMongoUri);
 
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS || CLIENT_URL
@@ -190,9 +186,11 @@ async function connectWithRetries(uri, attempts = 5, delayMs = 2000) {
   }
 }
 
-connectWithRetries(MONGODB_URI).catch((err) => {
+try {
+  await connectWithRetries(MONGODB_URI);
+} catch (err) {
   console.error('[MongoDB] Fatal connection error:', err);
-});
+}
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -234,25 +232,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Temporary DB check route (uses native driver) — returns immediate error message when connection fails
-app.get('/api/dbcheck', async (req, res) => {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) return res.status(500).json({ ok: false, error: 'MONGODB_URI not set' });
-
-  const client = new MongoClient(uri, {
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 5000,
-    family: 4
-  });
-
-  try {
-    await client.connect();
-    await client.db().admin().ping();
-    await client.close();
-    return res.json({ ok: true, message: 'native driver connected' });
-  } catch (err) {
-    return res.status(500).json({ ok: false, error: err.message || String(err) });
-  }
-});
+// (removed temporary /api/dbcheck route)
 
 // 404
 app.use((req, res) => {
