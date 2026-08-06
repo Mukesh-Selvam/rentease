@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Category is required'],
-      enum: ['Beds', 'Sofas', 'Tables', 'Refrigerators', 'Washing Machines', 'TVs', 'Appliances', 'Furniture', 'Packages', 'furniture', 'appliances', 'packages'],
+      enum: ['Beds', 'Sofas', 'Tables', 'Refrigerators', 'Washing Machines', 'TVs', 'Appliances', 'Furniture', 'Packages', 'Fitness', 'Electronics', 'furniture', 'appliances', 'packages', 'fitness', 'electronics'],
       index: true
     },
     type: {
