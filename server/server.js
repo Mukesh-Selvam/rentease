@@ -131,15 +131,32 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-// MongoDB
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
-    console.log(`[MongoDB] Connected successfully`);
-  })
-  .catch((err) => {
-    console.warn(`[MongoDB Warning] ${err.message}`);
-  });
+// MongoDB — connect with retries/backoff to handle transient network issues
+async function connectWithRetries(uri, attempts = 5, delayMs = 2000) {
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      await mongoose.connect(uri);
+      console.log('[MongoDB] Connected successfully');
+      return;
+    } catch (err) {
+      console.warn(`[MongoDB] Connection attempt ${i} failed: ${err.message}`);
+
+      if (i === attempts) {
+        console.error('[MongoDB] All connection attempts failed.');
+        if (process.env.NODE_ENV === 'production') {
+          console.error('[MongoDB] Exiting process due to failed DB connection in production.');
+          process.exit(1);
+        }
+      } else {
+        await new Promise((res) => setTimeout(res, delayMs));
+      }
+    }
+  }
+}
+
+connectWithRetries(MONGODB_URI).catch((err) => {
+  console.error('[MongoDB] Fatal connection error:', err);
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -159,14 +176,20 @@ app.use('/api/notifications', notificationRoutes);
 
 // Health Check
 app.get('/api/health', (req, res) => {
+  const readyState = mongoose.connection.readyState; // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
+  const stateMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+
   res.json({
     status: 'healthy',
     service: 'RentEase MERN API',
     timestamp: new Date().toISOString(),
-    dbState:
-      mongoose.connection.readyState === 1
-        ? 'connected'
-        : 'disconnected'
+    dbState: stateMap[readyState] || 'unknown',
+    dbReadyState: readyState
   });
 });
 
