@@ -102,11 +102,11 @@ async function seedDatabase() {
 
     // 2. Service Areas
     await ServiceArea.insertMany([
-      { city: 'Bengaluru', active: true, pincodes: ['560001', '560102', '560034', '560037', '560068', '560100'] },
-      { city: 'Mumbai', active: true, pincodes: ['400001', '400050', '400076', '400093'] },
-      { city: 'Delhi NCR', active: true, pincodes: ['110001', '110020', '122001', '201301'] },
-      { city: 'Hyderabad', active: true, pincodes: ['500001', '500032', '500081'] },
-      { city: 'Pune', active: true, pincodes: ['411001', '411014', '411057'] }
+      { city: 'Bengaluru', state: 'Karnataka', active: true, pincodes: '560001,560102,560034,560037,560068,560100' },
+      { city: 'Mumbai', state: 'Maharashtra', active: true, pincodes: '400001,400050,400076,400093' },
+      { city: 'Delhi NCR', state: 'Delhi', active: true, pincodes: '110001,110020,122001,201301' },
+      { city: 'Hyderabad', state: 'Telangana', active: true, pincodes: '500001,500032,500081' },
+      { city: 'Pune', state: 'Maharashtra', active: true, pincodes: '411001,411014,411057' }
     ]);
 
     // 3. Coupons
@@ -142,15 +142,13 @@ async function seedDatabase() {
         vendor: vendor._id,
         availableCities: ['Bengaluru', 'Mumbai', 'Delhi NCR', 'Hyderabad', 'Pune'],
         sku: 'FUR-OFF-001',
+        totalStock: 15,
         availableStock: 15,
         rentedStock: 5,
         maintenanceStock: 0,
-        pricing: [
-          { tenureMonths: 3, monthlyRent: 599, deposit: 1000 },
-          { tenureMonths: 6, monthlyRent: 499, deposit: 1000 },
-          { tenureMonths: 9, monthlyRent: 449, deposit: 1000 },
-          { tenureMonths: 12, monthlyRent: 399, deposit: 1000 }
-        ],
+        monthlyRent: 599,
+        deposit: 1000,
+        tenurePrices: { '3': 599, '6': 499, '9': 449, '12': 399 },
         images: ['https://images.unsplash.com/photo-1580481072645-022f9a6d1276?w=800'],
         featured: true,
         rating: 4.8,
@@ -166,15 +164,13 @@ async function seedDatabase() {
         vendor: vendor._id,
         availableCities: ['Bengaluru', 'Mumbai', 'Delhi NCR'],
         sku: 'APP-REF-002',
+        totalStock: 8,
         availableStock: 8,
         rentedStock: 3,
         maintenanceStock: 0,
-        pricing: [
-          { tenureMonths: 3, monthlyRent: 899, deposit: 2000 },
-          { tenureMonths: 6, monthlyRent: 749, deposit: 2000 },
-          { tenureMonths: 9, monthlyRent: 699, deposit: 2000 },
-          { tenureMonths: 12, monthlyRent: 649, deposit: 2000 }
-        ],
+        monthlyRent: 899,
+        deposit: 2000,
+        tenurePrices: { '3': 899, '6': 749, '9': 699, '12': 649 },
         images: ['https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=800'],
         featured: true,
         rating: 4.7,
@@ -190,15 +186,13 @@ async function seedDatabase() {
         vendor: vendor._id,
         availableCities: ['Bengaluru', 'Mumbai', 'Delhi NCR', 'Hyderabad', 'Pune'],
         sku: 'PKG-1BHK-001',
+        totalStock: 10,
         availableStock: 10,
         rentedStock: 2,
         maintenanceStock: 0,
-        pricing: [
-          { tenureMonths: 3, monthlyRent: 3499, deposit: 5000 },
-          { tenureMonths: 6, monthlyRent: 2999, deposit: 5000 },
-          { tenureMonths: 9, monthlyRent: 2799, deposit: 5000 },
-          { tenureMonths: 12, monthlyRent: 2499, deposit: 5000 }
-        ],
+        monthlyRent: 3499,
+        deposit: 5000,
+        tenurePrices: { '3': 3499, '6': 2999, '9': 2799, '12': 2499 },
         images: ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'],
         featured: true,
         rating: 4.9,
