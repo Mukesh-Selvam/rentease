@@ -132,24 +132,31 @@ app.post(
   handleRazorpayWebhook
 );
 
+let lastMongoError = null;
+let lastMongoEvent = null;
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 mongoose.connection.on('connecting', () => {
+  lastMongoEvent = 'connecting';
   console.log('[MongoDB] event: connecting');
 });
 
 mongoose.connection.on('connected', () => {
+  lastMongoEvent = 'connected';
   console.log('[MongoDB] event: connected');
 });
 
 mongoose.connection.on('disconnected', () => {
+  lastMongoEvent = 'disconnected';
   console.log('[MongoDB] event: disconnected');
 });
 
 mongoose.connection.on('error', (err) => {
-  console.error('[MongoDB] event: error', err);
+  lastMongoError = err.message || String(err);
+  console.error('[MongoDB] event: error', err.message || err);
 });
 
 const mongoConnectOptions = {
@@ -219,7 +226,9 @@ app.get('/api/health', (req, res) => {
     dbState: stateMap[readyState] || 'unknown',
     dbReadyState: readyState,
     mongoUriPresent: Boolean(process.env.MONGODB_URI),
-    usingMongoUri: sanitizedMongoUri || null
+    usingMongoUri: sanitizedMongoUri || null,
+    lastMongoEvent,
+    lastMongoError
   });
 });
 
