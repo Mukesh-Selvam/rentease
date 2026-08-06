@@ -194,7 +194,9 @@ app.get('/api/health', (req, res) => {
     service: 'RentEase MERN API',
     timestamp: new Date().toISOString(),
     dbState: stateMap[readyState] || 'unknown',
-    dbReadyState: readyState
+    dbReadyState: readyState,
+    mongoUriPresent: Boolean(process.env.MONGODB_URI),
+    usingMongoUri: sanitizedMongoUri || null
   });
 });
 
