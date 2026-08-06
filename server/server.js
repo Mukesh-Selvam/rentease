@@ -54,6 +54,11 @@ const CLIENT_URL =
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const sanitizedMongoUri = MONGODB_URI.replace(/(mongodb(?:\+srv)?:\/\/[^:]+:)([^@]+)(@.*)/, '$1*****$3');
+console.log('[MongoDB] NODE_ENV:', process.env.NODE_ENV || 'undefined');
+console.log('[MongoDB] MONGODB_URI set:', Boolean(process.env.MONGODB_URI));
+console.log('[MongoDB] Using URI:', sanitizedMongoUri);
+
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS || CLIENT_URL
 )
