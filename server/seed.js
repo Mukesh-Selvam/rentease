@@ -279,8 +279,8 @@ async function seedDatabase() {
         deposit: 1000,
         tenurePrices: { '3': 599, '6': 499, '9': 449, '12': 399 },
         images: [
-          'https://images.unsplash.com/photo-1580481072645-022f9a6d1276?w=800',
-          'https://images.unsplash.com/photo-1505797149-43b0069ec26b?w=800'
+          'https://images.unsplash.com/photo-1589384267710-7a2559663722?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1505797149-43b0069ec26b?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.8,
@@ -307,8 +307,8 @@ async function seedDatabase() {
         deposit: 2000,
         tenurePrices: { '3': 899, '6': 799, '9': 729, '12': 649 },
         images: [
-          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
-          'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800'
+          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,
@@ -335,8 +335,8 @@ async function seedDatabase() {
         deposit: 2500,
         tenurePrices: { '3': 999, '6': 899, '9': 819, '12': 749 },
         images: [
-          'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800',
-          'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800'
+          'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,
@@ -363,7 +363,7 @@ async function seedDatabase() {
         deposit: 1800,
         tenurePrices: { '3': 799, '6': 699, '9': 629, '12': 569 },
         images: [
-          'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800'
+          'https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&w=800&q=80'
         ],
         featured: false,
         rating: 4.7,
@@ -390,7 +390,7 @@ async function seedDatabase() {
         deposit: 1000,
         tenurePrices: { '3': 449, '6': 399, '9': 359, '12': 319 },
         images: [
-          'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800'
+          'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=800&q=80'
         ],
         featured: false,
         rating: 4.8,
@@ -419,7 +419,7 @@ async function seedDatabase() {
         deposit: 2500,
         tenurePrices: { '3': 999, '6': 849, '9': 779, '12': 699 },
         images: [
-          'https://images.unsplash.com/photo-1571175432267-efb92b4c6831?w=800'
+          'https://images.unsplash.com/photo-1571175432267-efb92b4c6831?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,
@@ -446,7 +446,7 @@ async function seedDatabase() {
         deposit: 2200,
         tenurePrices: { '3': 899, '6': 789, '9': 719, '12': 649 },
         images: [
-          'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=800'
+          'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.8,
@@ -473,7 +473,7 @@ async function seedDatabase() {
         deposit: 3000,
         tenurePrices: { '3': 1199, '6': 1049, '9': 949, '12': 849 },
         images: [
-          'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=800'
+          'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,
@@ -500,7 +500,7 @@ async function seedDatabase() {
         deposit: 3500,
         tenurePrices: { '3': 1499, '6': 1299, '9': 1199, '12': 1099 },
         images: [
-          'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'
+          'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80'
         ],
         featured: false,
         rating: 4.7,
@@ -529,7 +529,7 @@ async function seedDatabase() {
         deposit: 3000,
         tenurePrices: { '3': 1299, '6': 1149, '9': 1029, '12': 929 },
         images: [
-          'https://images.unsplash.com/photo-1576678927484-cc909957088c?w=800'
+          'https://images.unsplash.com/photo-1576678927484-cc909957088c?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.8,
@@ -556,7 +556,7 @@ async function seedDatabase() {
         deposit: 1500,
         tenurePrices: { '3': 699, '6': 599, '9': 539, '12': 479 },
         images: [
-          'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800'
+          'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80'
         ],
         featured: false,
         rating: 4.7,
@@ -585,7 +585,7 @@ async function seedDatabase() {
         deposit: 5000,
         tenurePrices: { '3': 3499, '6': 2999, '9': 2799, '12': 2499 },
         images: [
-          'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800'
+          'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,
@@ -612,7 +612,7 @@ async function seedDatabase() {
         deposit: 2500,
         tenurePrices: { '3': 1499, '6': 1299, '9': 1169, '12': 1049 },
         images: [
-          'https://images.unsplash.com/photo-1580481072645-022f9a6d1276?w=800'
+          'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80'
         ],
         featured: true,
         rating: 4.9,

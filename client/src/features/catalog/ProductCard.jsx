@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
+
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80';
 
 export const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
@@ -12,9 +15,11 @@ export const ProductCard = ({ product }) => {
     : product.tenurePrices || {};
 
   const monthlyPrice = tenurePricesMap['12'] || product.monthlyRent || product.price || 799;
-  const image = product.images && product.images.length > 0
+  const initialImage = product.images && product.images.length > 0 && product.images[0]
     ? product.images[0]
-    : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=80';
+    : FALLBACK_IMAGE;
+
+  const [imgSrc, setImgSrc] = useState(initialImage);
 
   return (
     <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col group">
@@ -22,8 +27,9 @@ export const ProductCard = ({ product }) => {
       {/* Product Image */}
       <div className="relative aspect-4/3 bg-slate-100 overflow-hidden">
         <img
-          src={image}
+          src={imgSrc}
           alt={product.title}
+          onError={() => setImgSrc(FALLBACK_IMAGE)}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 left-3 flex flex-col gap-1">
