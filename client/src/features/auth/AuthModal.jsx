@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Mail, ShieldCheck, User as UserIcon, Phone, Building } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -7,7 +7,7 @@ import authService from '../../services/authService';
 
 export const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const { triggerToast } = useToast();
 
   const [authMode, setAuthMode] = useState(initialMode); // 'login' | 'register_customer' | 'register_vendor' | 'forgot'
@@ -18,6 +18,14 @@ export const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [companyName, setCompanyName] = useState('');
   const [loading, setLoading] = useState(false);
   const [forgotMessage, setForgotMessage] = useState(null);
+
+  // Synchronize mode when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setAuthMode(initialMode);
+      setForgotMessage(null);
+    }
+  }, [isOpen, initialMode]);
 
   if (!isOpen) return null;
 
@@ -67,14 +75,14 @@ export const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
           navigate('/dashboard');
         }
       } else if (authMode === 'register_customer') {
-        await authService.register({
+        const res = await register({
           name,
           email,
           password,
           phone,
           role: 'CUSTOMER'
         });
-        triggerToast('Customer account created successfully!');
+        triggerToast(`Account created successfully! Welcome, ${res.user?.name || name}!`);
         onClose();
         navigate('/dashboard');
       } else if (authMode === 'register_vendor') {
@@ -89,7 +97,14 @@ export const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
         onClose();
       }
     } catch (err) {
-      triggerToast(err.response?.data?.message || 'Authentication failed. Please check your credentials.', 'error');
+      const errorMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        (authMode === 'login'
+          ? 'Authentication failed. Please check your credentials.'
+          : 'Registration failed. Please check your details and try again.');
+      triggerToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }

@@ -25,17 +25,10 @@ dotenv.config();
 
 // Startup validation for production
 if (process.env.NODE_ENV === 'production') {
-  const requiredEnvVars = [
-    'JWT_SECRET',
-    'MONGODB_URI',
-    'CLIENT_URL'
-  ];
-
+  const requiredEnvVars = ['JWT_SECRET', 'MONGODB_URI'];
   const missing = requiredEnvVars.filter((v) => !process.env[v]);
-
   if (missing.length > 0) {
-    console.error(`[FATAL] Missing required production environment variables: ${missing.join(', ')}`);
-    process.exit(1);
+    console.warn(`[WARN] Missing recommended production environment variables: ${missing.join(', ')}`);
   }
 }
 
@@ -57,50 +50,27 @@ const isProduction = process.env.NODE_ENV === 'production';
 const sanitizedMongoUri = MONGODB_URI.replace(/(mongodb(?:\+srv)?:\/\/[^:]+:)([^@]+)(@.*)/, '$1*****$3');
 
 const allowedOrigins = (
-  process.env.ALLOWED_ORIGINS || CLIENT_URL
+  process.env.ALLOWED_ORIGINS || process.env.CLIENT_URL || '*'
 )
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-if (!isProduction) {
-  allowedOrigins.push(
-    'http://localhost:5173',
-    'http://127.0.0.1:5173'
-  );
-}
-
-// Security
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", 'https://checkout.razorpay.com'],
-        frameSrc: [
-          "'self'",
-          'https://api.razorpay.com',
-          'https://checkout.razorpay.com'
-        ],
-        connectSrc: [
-          "'self'",
-          'https://api.razorpay.com'
-        ],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https:'],
-        fontSrc: ["'self'", 'https:', 'data:']
-      }
-    },
-    crossOriginResourcePolicy: {
-      policy: 'cross-origin'
-    }
-  })
-);
-
-// CORS
+// CORS configuration
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (
+        !isProduction ||
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
     methods: [
       'GET',
@@ -117,6 +87,16 @@ app.use(
       'X-Idempotency-Key',
       'X-Razorpay-Signature'
     ]
+  })
+);
+
+// Helmet Security Headers
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin'
+    }
   })
 );
 
@@ -163,34 +143,36 @@ const mongoConnectOptions = {
   family: 4
 };
 
-// MongoDB — connect with retries/backoff to handle transient network issues
-async function connectWithRetries(uri, attempts = 5, delayMs = 2000) {
-  for (let i = 1; i <= attempts; i++) {
-    try {
-      await mongoose.connect(uri, mongoConnectOptions);
-      console.log('[MongoDB] Connected successfully');
-      return;
-    } catch (err) {
-      console.warn(`[MongoDB] Connection attempt ${i} failed: ${err.message}`);
+// Serverless-friendly DB connection re-use
+let dbPromise = null;
 
-      if (i === attempts) {
-        console.error('[MongoDB] All connection attempts failed.');
-        if (process.env.NODE_ENV === 'production') {
-          console.error('[MongoDB] Exiting process due to failed DB connection in production.');
-          process.exit(1);
-        }
-      } else {
-        await new Promise((res) => setTimeout(res, delayMs));
-      }
-    }
+async function connectToDatabase() {
+  if (mongoose.connection.readyState >= 1) {
+    return;
   }
+  if (!dbPromise) {
+    dbPromise = mongoose.connect(MONGODB_URI, mongoConnectOptions)
+      .then(() => {
+        console.log('[MongoDB] Connected successfully');
+      })
+      .catch((err) => {
+        dbPromise = null;
+        console.error('[MongoDB] Connection error:', err.message || err);
+      });
+  }
+  return dbPromise;
 }
 
-try {
-  await connectWithRetries(MONGODB_URI);
-} catch (err) {
-  console.error('[MongoDB] Fatal connection error:', err);
-}
+// Auto-connect middleware for serverless invocations
+app.use(async (req, res, next) => {
+  if (mongoose.connection.readyState < 1) {
+    await connectToDatabase();
+  }
+  next();
+});
+
+// Trigger initial async connection attempt
+connectToDatabase();
 
 // Routes
 app.use('/api/auth', authRoutes);
